@@ -1,137 +1,24 @@
-# Fixtures Generator Algorithim
-Algorithm to generate football matches fixtures (Data Structures and Algorithms Term Project)
+In this project, I developed an algorithm to generate football match fixtures for the **XYZ Premier League**, which involves 10 teams. The league rules specify that each team must play every other team twice, once at their home stadium and once away. To ensure fairness, teams from the same local town should only face each other after they have played against teams from other towns. Additionally, the fixtures are designed such that only 4 teams play each weekend, with each weekend featuring two matches. The program outputs the generated fixtures in a CSV file and displays them on-screen for easy reference.
 
-## Quick Links
-1. [Problem](#problem)
-2. [Solution](#solution)
-3. [Data Types](#data-types)
-4. [Util Class](#util-class)
-5. [Aysmptotic Analysis](#aysmptotic-analysis)
+The solution begins by reading the team data from a CSV file and creating objects to represent each team. Each team is paired with every other team to create a list of matches. The program then applies the **Fisher-Yates shuffle** algorithm to randomize the order of the matches, ensuring fairness in match scheduling. Afterward, the matches are sorted by leg (first leg before the second leg), and then grouped into weekends, with each weekend containing two matches. The program also ensures that local teams face each other only after playing teams from other towns. Finally, the program writes the generated weekend fixtures to an output CSV file and displays them on the screen.
 
-## Problem
-In ABC premier league, there are 10 teams. You have been hired to build a program that will generate
-fixtures for these teams based on the following given rules.
-
-1. A team must play every other team twice, i.e. in their home stadium and away stadium. At some
-point, teams from the same local town will have to play each other, these teams should only meet
-after they have played teams from other local towns.
-2. Only 4 teams can play in a given weekend, for example CKlein Stars vs Dolpins FC and Wolves
-FC vs SeaHorses FC.
-3. While developing the fixtures, indicate the local town, stadium, leg (i.e. 1 or 2) and the weekend
-(indicate as weekend #1, weekend #2 etc.) the teams are meant to meet.
-
-Display the final table in a CSV file (and on screen) to show the generated fixtures
+### Example of Team List (with new names):
 
 | Team Name           | Local Town | Team Stadium  |
-| :-----------------: |:----------:|:-------------:|
-| Cklein Starts       | Nairobi    | Cklein Arena  |
-| Wolves FC           | Nairobi    | Wolves        |
-| Dolphins FC         | Mombasa    | Dolphins      |
-| Sea Horses FC       | Mombasa    | SHorses Arena |
-| Sharks United       | Kisumu     | Sharks Field  |
-| Lake Basin FC       | Kisumu     | LBasin        |
-| Thika United        | Thika      | Thika Field   |
-| Mavuno Comrades FC  | Thika      | Vuno Grounds  |
-| Nakuru FC           | Nakuru     | Nakuru Field  |
-| Ostrich Associates  | Nakuru     | OAssociates   |
+| ------------------ |:----------:|:-------------:|
+| Thunder FC          | Springfield | Thunder Arena |
+| River City United   | Springfield | River Arena   |
+| Mountain FC         | Boulder    | Mountain Grounds |
+| Seaside Warriors    | Boulder    | Seaside Park  |
+| Desert Lions        | Tucson     | Desert Field  |
+| Canyon Eagles       | Tucson     | Canyon Arena  |
+| Greenfield Rangers  | Greenfield | Greenfield Stadium |
+| Skyline FC          | Greenfield | Skyline Park  |
+| Bay Area FC         | Bayview    | Bayview Field |
+| Sunset FC           | Bayview    | Sunset Grounds |
 
+The `Team` structure consists of the team’s name, local town, and stadium. The `Match` structure pairs two teams together, and it also tracks whether the match is a local derby and the leg number (first or second). The `Weekend` structure groups two matches that will be played in the same weekend. The utility class provides various methods, such as reading team data from a CSV file, generating matches, creating weekend games, and outputting the fixtures in a structured format. Additionally, it includes methods to display the teams, matches, and fixtures on-screen.
 
-## Solution
+In terms of performance, the time complexity for generating matches (`createMatches()`) is `O(n^2)` due to the nested loops required for pairing teams. The time complexity for grouping matches into weekends (`createWeekendGames()`) is `O(n)`, as it involves a single loop to organize matches. The Fisher-Yates shuffle algorithm (`shuffleMatches()`) has a time complexity of `O(n)` since it iterates through the matches once to randomize them. Sorting the matches by leg (`sortMatches()`) is done using bubble sort with a time complexity of `O(n^2)`.
 
-1. Read values from input file (Comma Separated Values) and create `Teams`
-
-2. Pair `Teams` into `Matches`
-
-3. Shuffle the created `Matches` (Fisher-Yates shuffle algorithim)
-
-4. Sort the shuffled `Matches` in acsending order depending on the leg (Ensures first legs are played before second legs)
-
-5. Create `Weekend Games` - Each Weekend has 2 `Matches`
-
-6. Write the generated `Weekend Games`to output file (.csv)
-
-## Data Types
-
-### Team
-
-``` cpp
-    struct Team
-    {
-        std::string name;
-        std::string town;
-        std::string stadium;
-    };
-```
-
-### Match
-
-```cpp
-    struct Match
-    {
-        Team home;
-        Team away;
-        bool derby;
-        int leg;
-    };
-```
-
-### Weekend Game
-
-```cpp
-struct Weekend
-{
-    Match matches[2];
-};
-```
-
-## Util Class
-A utility class which defines the following member methods
-
-```cpp
- private:
-   bool havePlayedBefore(Team a, Team b); // Check is the teams have played with each other before
-
- public:
-    void readFile(std::string); // Opens a csv file, reads its contents as it creates the teams
-    void writeFile(std::string); // Creates a csv file and writes the generated fixtures
-
-    void createMatches(); // Pairs Teams
-    void createWeekendGames(); // Pairs Matches 
-    void shuffleMatches(); // Shuffles generated Matches (Fisher-Yates shuffle algorithm)
-    void sortMatches(); // Sorts Generated Matches' legs' in ascending order (Bubble sort)
-
-    void displayFixtures(); // Dislays generated fixtures on the console
-    void displayMatches(); // Display Generated matches on the console
-    void printTeams(); // Display Teams read from file
-    int getFixturesCount(); // Returns number of fixtures generated
-    int getTeamCount(); // Returns number of teams created
-```
-
-And the following member variables
-
-```cpp
-    std::vector<Team> teams; // List of all teams
-    std::vector<Match> matches; // List of all mathces (90)
-    std::vector<Weekend> weekendGames; // List of all fixtures (45)
-```
-
-
-## Aysmptotic Analysis
-
-###  `void Util::createMatches()`
-
-Time Complexity `O(n^2)` : Nested loop
-
-### `void Util::createWeekendGames()`
-
-Time Complexity O(n) : Single loop
-
-### `void Util::shuffleMatches()`
-
-Time Complexity O(n) : Single loop
-
-### `void Util::sortMatches()`
-
-Time Complexity O(n^2) : Bubble Sort
-
-
+This approach provides an efficient way to generate a football league’s fixtures while adhering to the specified constraints and ensuring a fair distribution of matches.
