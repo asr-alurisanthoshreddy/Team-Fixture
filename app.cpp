@@ -12,7 +12,7 @@ void instructions(Util &util) {
 	cout << "--                                                                      --\n";
 	cout << "-                              Mini-Project                              -\n";
 	cout << "--                                                                      --\n";
-	cout << "----         https://github.com/EdwinWalela/fixture-generator         ----\n";
+	cout << "----                                                                  ----\n";
 	cout << "-----                                                                -----\n";
 	cout << "--------------------------------------------------------------------------\n";
 	cout << "\n\n";
